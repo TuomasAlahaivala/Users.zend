@@ -1,0 +1,54 @@
+<?php
+ // module/Users/view/users/users/index.phtml:
+
+ $title = 'Users';
+ $this->headTitle($title);
+ ?>
+ <h1><?php echo $this->escapeHtml($title); ?></h1>
+
+ <?php
+if(!isset($user_info->user_name)){?>
+   <p>
+     <a href="<?php echo $this->url('users', array('action'=>'registry'));?>">Rekisteröidy</a>
+ </p>  
+     <?php
+ $loginform->setAttribute('action', $this->url('users', array('action' => 'index')));
+ $loginform->prepare();
+
+ echo $this->form()->openTag($loginform);
+ echo $this->formRow($loginform->get('user_name'));
+ echo $this->formRow($loginform->get('user_pass'));
+ echo $this->formSubmit($loginform->get('submit'));
+ echo $this->form()->closeTag();
+ echo $error;
+}else{
+    
+    echo "<p>Moi, ".$user_info->user_name." Level is:".$user_info->user_level."</p>";?>
+    <a href="<?php echo $this->url('users', array('action'=>'logout'));?>">Logout</a>
+        
+        <?php
+
+}
+if(isset($user_info->user_name) && $user_info->user_level == "1"){
+ ?>
+ <table class="table">
+ <tr>
+     <th>Nimi</th>
+     <th>Email</th>
+     <th>&nbsp;</th>
+ </tr>
+ <?php foreach ($users as $user) : ?>
+ <tr>
+     <td><?php echo $this->escapeHtml($user->user_name);?></td>
+     <td><?php echo $this->escapeHtml($user->email);?></td>
+     <td>
+         <a href="<?php echo $this->url('users',
+             array('action'=>'edit', 'id' => $user->id));?>">Edit</a>
+         <a href="<?php echo $this->url('users',
+             array('action'=>'delete', 'id' => $user->id));?>">Delete</a>
+     </td>
+ </tr>
+ <?php endforeach; 
+}
+ ?>
+ </table>
